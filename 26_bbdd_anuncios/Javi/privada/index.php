@@ -1,10 +1,14 @@
 <?php
 
+// Utilizaremos funciones
+require("../includes/funciones.php");
+
 // ************************************************************************************
 // Vamos a utilizar variables de sesión para controlar si el usuario se ha identificado
 // ************************************************************************************
 
 session_start();
+
 //Vamos a comprobar si existe una variable de sesión que contenga el id de usuario
 if (isset($_SESSION["id_usuario"])) {
 	//El usuario está identificado
@@ -64,30 +68,31 @@ Permite añadir, editar y eliminar anuncios -CRUD-
 			<tr>
 				<!-- Accedemos a la bbdd para obtener los anuncios de un usuario -->
 				<?php
-				require("../includes/conexion.php");
-				// Montamos una consulta SQL
-				$consulta = "select * from anuncios where id_usuario=$id_usuario";
-				// Lanzamos la consulta a la bbdd mediante la conexion abierta
-				$datos = mysqli_query($conexion, $consulta);
-				// No se cuantas filas de datos me va a devolver la bbdd
-				// Con este bucle recorremos fila a fila, los datos que nos devuelve la consulta
-				while ($fila = mysqli_fetch_assoc($datos)) {
+				//Cargar los anuncios del usuario
+				// Le pasamos como parámetro el -$id_usuario- para que lea los anuncios de ese usuario
+			$anuncios = cargarAnuncios($id_usuario);
+			// Con este bucle recorremos fila a fila, los datos que nos devuelve la consulta
+			for($pos=0;$pos<count($anuncios);$pos++) {
+				// Dejamos en la variable -$anuncio- los datos de cada fila a cada paso de bucle
+				$anuncio = $anuncios[$pos];
+				// Obtenemos también el -id_anuncio- del array porque lo pasareos después por url en los links (debajo)
+				$id_anuncio = $anuncio["id_anuncio"];
+				//Ahora mostramos los datos en la tabla
 				?>
-					<!-- Mostramos un anuncio por cada fila -->
-			<tr>
-				<td><img src="../fotos/default.png" width="80" /></td>
-				<td><?php echo $fila["titulo"] ?></td>
-				<td><?php echo $fila["fecha"] ?></td>
-				<td><?php echo $fila["precio"] ?></td>
-
+				<tr>
+					<td><img src="../fotos/default.png" width="80" /></td>
+					<td><?php echo $anuncio["titulo"] ?></td>
+					<td><?php echo $anuncio["fecha"] ?></td>
+					<td><?php echo $anuncio["precio"] ?></td>
+				
 				<!--*************************************************************************************
 				Ponemos dos iconos en cada fila: uno para editar el anuncio y otro para eliminarlo
 				*****************************************************************************************-->
 
 				<!-- Link para editar/actualizar el anuncio de la fila. Pasa el -id_anuncio- y la variable -op- con el valor 2 por url GET al controlador de la zona privada -->
-				<td><a href="controlador_pr.php?id_anuncio=<?php echo $fila["id_anuncio"] ?> & op=2" title="Editar"><i class="far fa-edit" style="color:green"></i></a></td>
+				<td><a href="controlador_pr.php?id_anuncio=<?php echo $id_anuncio ?> & op=2" title="Editar"><i class="far fa-edit" style="color:green"></i></a></td>
 				<!-- Link para eliminar el anuncio de la fila. Pasa el -id_anuncio- y la variable -op- con el valor 4 por url GET al controlador de la zona privada -->
-				<td><a href="controlador_pr.php?id_anuncio=<?php echo $fila["id_anuncio"] ?> & op=4" title="Eliminar" onclick="return confirm('¿Quieres eliminar el anuncio')"><i class="far fa-trash-alt" style="color:red"></i></a></td>
+				<td><a href="controlador_pr.php?id_anuncio=<?php echo $id_anuncio ?> & op=4" title="Eliminar" onclick="return confirm('¿Quieres eliminar el anuncio')"><i class="far fa-trash-alt" style="color:red"></i></a></td>
 			<tr>
 			<?php } ?>
 		</table>

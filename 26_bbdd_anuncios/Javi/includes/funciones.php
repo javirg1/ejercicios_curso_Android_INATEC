@@ -128,9 +128,59 @@ function eliminar($id_anuncio)
 	//Conectar con la bbdd
 	require("conexion.php");
 	$consulta = "DELETE FROM  anuncios WHERE id_anuncio=$id_anuncio";
-	//Lanzar la consulta a la bbdd mediante la conexion abierta:
+	//Lanzar la consulta a la bbdd mediante la conexion abierta
 	mysqli_query($conexion, $consulta);
 	//Necesito comprobar de alguna forma si el dato se ha insertado:
 	//Compruebo si ha habido filas (registros) afectados
 	return mysqli_affected_rows($conexion);
+}
+
+// ************************************************************************************
+// Devuelve los datos de un anuncio
+// Devuelve un array con los datos que se mostrarán en el formulario DETALLES_ANUNCIO
+// ************************************************************************************
+
+//Esta función carga los datos de un anuncio, partiendo de su id:
+function cargarDatosAnuncio($id_anuncio) {
+	//Creamos el array vacio
+	$datos_anuncio = array();
+	require("conexion.php");
+	// SQL que combina datos de las dos tabas para mostrar el nombre del usuario que ha publicado el anuncio 
+	$consulta = "Select id_anuncio,titulo,fecha,precio,descripcion,nombre,usuarios.id_usuario from anuncios,usuarios where id_anuncio = $id_anuncio and usuarios.id_usuario = anuncios.id_usuario";
+	//Lanzamos la consulta a la bbdd mediante la conexion abierta
+	$datos = mysqli_query($conexion, $consulta);
+	//recorro los datos que me devuelve la bbdd y los meto en un array
+	if ($fila = mysqli_fetch_assoc($datos)) {
+		$datos_anuncio["id_anuncio"] = $id_anuncio;
+		$datos_anuncio["titulo"] = $fila["titulo"];
+		$datos_anuncio["fecha"] = $fila["fecha"];
+		$datos_anuncio["precio"] = $fila["precio"];
+		$datos_anuncio["descripcion"] = $fila["descripcion"];
+		$datos_anuncio["id_usuario"] = $fila["id_usuario"];
+		$datos_anuncio["nombre"] = $fila["nombre"];
+	}
+	return $datos_anuncio;
+}
+
+// ************************************************************************************
+// Devuelve los datos de los anuncios de un usuario o de todos los usuarios
+// Devuelve un array con los datos que se mostrarán en el el -index.php- de la zona pública y privada
+// ************************************************************************************
+
+//Ponemos un parametro opcional (al igualarlo a cero, pasa a ser un parametro opcional)
+function cargarAnuncios($id_usuario=0) {
+	// Creamos el array vacio
+	$datos_anuncios = array();
+	require("conexion.php");
+	if ($id_usuario>0) {
+		$consulta = "SELECT * FROM anuncios WHERE id_usuario = $id_usuario";
+	} else {
+		$consulta = "SELECT * FROM anuncios";
+	}
+	$datos = mysqli_query($conexion, $consulta);
+	while ($fila = mysqli_fetch_assoc($datos)) {
+		// Dejamos en el array cada una de las filas
+		$datos_anuncios[] = $fila;
+	}
+	return $datos_anuncios;
 }

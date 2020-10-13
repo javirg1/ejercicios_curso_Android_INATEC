@@ -1,5 +1,8 @@
 <?php
 
+// Utilizaremos funciones
+require("../includes/funciones.php");
+
 // ************************************************************************************
 // Vamos a utilizar variables de sesión
 // ************************************************************************************
@@ -15,12 +18,14 @@ Formulario para LISTAR los anuncios de la zona pública -todos los usuarios-
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Ejercicio Anuncios - Zona pública</title>
 	<script src="https://kit.fontawesome.com/15d8ae3708.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
 	<center>
 		<h1>WEB DE ANUNCIOS - COMPRA y VENTA</h1>
@@ -28,13 +33,13 @@ Formulario para LISTAR los anuncios de la zona pública -todos los usuarios-
 		<?php
 		// Si el usuario está identificado, le ofrecemos el enlace para ir a la zona privada
 		if (isset($_SESSION["id_usuario"])) { ?>
-			<h2>Hola <span style=color:forestgreen><?php echo $_SESSION["nombre_usuario"] ?></span>, si lo deseas puedes ir a tu zona  <a href="../privada/index.php">privada</a></h2>
+			<h2>Hola <span style=color:forestgreen><?php echo $_SESSION["nombre_usuario"] ?></span>, si lo deseas puedes ir a tu zona <a href="../privada/index.php">privada</a></h2>
 		<?php } else { ?>
 			<h3>Si quieres poner tus anuncios, <a href="login.php">identifícate</a></h3>
 		<?php } ?>
 
 		<!--*************************************************************************************
-		Listamos los anuncios de la zona pública alternando html y php
+		Listamos los anuncios de la zona pública
 		*****************************************************************************************-->
 		<hr>
 		<h3>Listado de anuncios actuales</h3>
@@ -46,29 +51,29 @@ Formulario para LISTAR los anuncios de la zona pública -todos los usuarios-
 				<td>PRECIO</td>
 			<tr>
 				<!-- Accedemos a la bbdd para obtener los anuncios de un usuario -->
-		<?php
-			require("../includes/conexion.php"); 
-			// Montamos una consulta SQL
-			$consulta = "select * from anuncios";
-			// Lanzamos la consulta a la bbdd mediante la conexion abierta
-			$datos = mysqli_query($conexion, $consulta);
-				// No se cuantas filas de datos me va a devolver la bbdd
+				<?php
+				// Cargamos todos los anuncios utilizando una función
+				// No le pasamos parámetros porque queremos ver todos los anuncios publicados.
+				$anuncios = cargarAnuncios();
 				// Con este bucle recorremos fila a fila, los datos que nos devuelve la consulta
-			while($fila = mysqli_fetch_assoc($datos)) {
-				//Ahora ya puedo pintar la fila en HTML:
+				for ($pos = 0; $pos < count($anuncios); $pos++) {
+					// Dejamos en la variable -$anuncio- los datos de cada fila a cada paso de bucle
+					$anuncio = $anuncios[$pos];
+					// Obtenemos también el -id_anuncio- del array porque lo pasareos después por url en el link (debajo)
+					$id_anuncio = $anuncio["id_anuncio"];
+					//Ahora mostramos los datos en la tabla
 				?>
-				<!-- Mostramos un anuncio por cada fila -->
-				<tr>
-					<td><img src="../fotos/default.png" width="80" /></td>
-					<td><?php echo $fila["titulo"] ?></td>
-					<td><?php echo $fila["fecha"] ?></td>
-					<td><?php echo $fila["precio"] ?></td>
-					<!-- Link para ver los detalles del anuncio de essa fila Pasa el -id_anuncio- y la variable -op- con el valor 3 por url GET al controlador de la zona pública -->
-				<td><a href="controlador.php?id_anuncio=<?php echo $fila["id_anuncio"] ?> & op=3" title="Ver anuncio"><i class="far fa-eye" style="color:green"></i></a></td>
-				<tr>
+			<tr>
+				<td><img src="../fotos/default.png" width="80" /></td>
+				<td><?php echo $anuncio["titulo"] ?></a></td>
+				<td><?php echo $anuncio["fecha"] ?></td>
+				<td><?php echo $anuncio["precio"] ?></td>
+				<!-- Link para ver los detalles del anuncio. Pasamos por url el -$id_anuncio- que hemos obtenido antes -->
+				<td><a href="detalle_anuncio.php?id_anuncio=<?php echo $id_anuncio ?>" title="Ver anuncio"><i class="far fa-eye" style="color:green"></i></a></td>
+			<tr>
 			<?php } ?>
 		</table>
-
 	</center>
 </body>
+
 </html>
