@@ -25,6 +25,11 @@ if (isset($_POST["op"])) {
 	$op=0;
 	$pagina = "index.php";
 }
+// Por GET solo vendrán la opción -ver- del formulario -index.php- de la zona pública
+if (isset($_GET["op"])) {
+    $id_anuncio = $_GET["id_anuncio"];
+    $op = $_GET["op"];
+}
 
 // ************************************************************************************
 // VALIDAR USUARIO - opción 1
@@ -78,9 +83,24 @@ if ($op == 2) {
 }
 
 // ************************************************************************************
+// DETALLE ANUNCIO (zona pública) - opción 3
+// ************************************************************************************
+
+if($op==3){
+	// Llamamos a la función que leerá los datos del anuncio, pasándole como argumento el -id_anuncio- que hemos obtenido por el método GET (más arriba en este código)
+    $datos_anuncio = cargar_anuncio($id_anuncio);
+    // Guardamos en variables de sesíon los datos obtenidos en el array de la función -cargar_anuncio- (excepto -id_anuncio- que ya lo habíamos obtenido por el método GET)
+    $_SESSION["id_anuncio"] = $id_anuncio;
+    $_SESSION["titulo"] = $datos_anuncio["titulo"];
+    $_SESSION["descripcion"] = $datos_anuncio["descripcion"];
+    $_SESSION["precio"] = $datos_anuncio["precio"];
+    $_SESSION["fecha"] = $datos_anuncio["fecha"];
+	// redirijimos a -editar.php- de la zona privada. Allí mostraremos los datos del anuncio utilizando las variables de sesión creadas anteriormente
+	$pagina ="detalle_anuncio.php";
+}
+
+// ************************************************************************************
 //En función del resultado, redirijo a una página u otra pasándole la variable -$pagina-
 // ************************************************************************************
 
 header("Location:$pagina");
-
-?>

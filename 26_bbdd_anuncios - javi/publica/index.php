@@ -19,6 +19,7 @@ Formulario para LISTAR los anuncios de la zona pública -todos los usuarios-
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Ejercicio Anuncios - Zona pública</title>
+	<script src="https://kit.fontawesome.com/15d8ae3708.js" crossorigin="anonymous"></script>
 </head>
 <body>
 	<center>
@@ -62,6 +63,8 @@ Formulario para LISTAR los anuncios de la zona pública -todos los usuarios-
 					<td><?php echo $fila["titulo"] ?></td>
 					<td><?php echo $fila["fecha"] ?></td>
 					<td><?php echo $fila["precio"] ?></td>
+					<!-- Link para ver los detalles del anuncio de essa fila Pasa el -id_anuncio- y la variable -op- con el valor 3 por url GET al controlador de la zona pública -->
+				<td><a href="controlador.php?id_anuncio=<?php echo $fila["id_anuncio"] ?> & op=3" title="Editar"><i class="far fa-eye" style="color:green"></i></a></td>
 				<tr>
 			<?php } ?>
 		</table>
