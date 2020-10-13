@@ -95,7 +95,7 @@ if($op==3){
     $_SESSION["descripcion"] = $datos_anuncio["descripcion"];
     $_SESSION["precio"] = $datos_anuncio["precio"];
     $_SESSION["fecha"] = $datos_anuncio["fecha"];
-	// redirijimos a -editar.php- de la zona privada. Allí mostraremos los datos del anuncio utilizando las variables de sesión creadas anteriormente
+	// redirijimos a -detalle_anuncio.php- de la zona pública. Allí mostraremos los datos del anuncio utilizando las variables creadas anteriormente
 	$pagina ="detalle_anuncio.php";
 }
 
