@@ -42,7 +42,7 @@ Formulario para LISTAR los anuncios de la zona pública -todos los usuarios-
 		Listamos los anuncios de la zona pública
 		*****************************************************************************************-->
 		<hr>
-		<h3>Listado de anuncios actuales</h3>
+		<h3>Listado de todos los anuncios. <?php echo $total_anuncios=contadorAnuncios();?> anuncios activos</h3>
 		<table width="600" style='border:solid 2px blue'>
 			<tr>
 				<td>FOTO</td>

@@ -53,7 +53,7 @@ Permite añadir, editar y eliminar anuncios -CRUD-
 		<p>Si lo deseas, puedes insertar un <a href="nuevo.php">nuevo anuncio</a> o ver todos los anuncios <a href="../publica/index.php">de la zona publica</a></p>
 		<p><a href="salir.php">Log out</a> para salir de tu zona privada</p>
 		<hr>
-		<h3>Estos son tus anuncios publicados</h3>
+		<h3>Estos son tus <?php echo $total_anuncios=contadorAnuncios($id_usuario);?> anuncios publicados </h3>
 
 		<!--*************************************************************************************
 		Listamos los anuncios del usuario alternando html y php

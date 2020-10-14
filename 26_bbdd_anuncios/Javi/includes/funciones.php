@@ -184,3 +184,22 @@ function cargarAnuncios($id_usuario=0) {
 	}
 	return $datos_anuncios;
 }
+
+// ************************************************************************************
+// Devuelve la cantidad de anuncios de un usuario o el total de anuncios publicados
+// ************************************************************************************
+
+function contadorAnuncios($id_usuario=0) {
+	require("conexion.php");
+	if ($id_usuario>0) {
+		$consulta = "SELECT count(*) as total_anuncios FROM anuncios WHERE id_usuario= $id_usuario";
+	} else {
+		$consulta = "SELECT count(*) as total_anuncios FROM anuncios";
+	}
+	$datos = mysqli_query($conexion, $consulta);
+	if ($fila = mysqli_fetch_assoc($datos)) {
+		// Dejamos en el array cada una de las filas
+		$contador= $fila["total_anuncios"];
+	}
+	return $contador;
+}
