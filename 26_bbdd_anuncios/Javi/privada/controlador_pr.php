@@ -68,7 +68,7 @@ if ($op == 1) {
 
 if ($op == 2) {
     // Llamamos a la función que leerá los datos del anuncio, pasándole como argumento el -id_anuncio- que hemos obtenido por el método GET (más arriba en este código)
-    $datos_anuncio = cargar_anuncio($id_anuncio);
+    $datos_anuncio = cargarDatosAnuncio($id_anuncio);
     // Guardamos en variables de sesíon los datos obtenidos en el array de la función -cargar_anuncio- (excepto -id_anuncio- que ya lo habíamos obtenido por el método GET)
     $_SESSION["id_anuncio"] = $id_anuncio;
     $_SESSION["titulo"] = $datos_anuncio["titulo"];

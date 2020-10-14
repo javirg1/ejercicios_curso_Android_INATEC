@@ -80,12 +80,12 @@ function nuevo_anuncio($id_usuario, $titulo, $descripcion, $precio, $fecha)
 	return mysqli_insert_id($conexion);
 }
 
-// ************************************************************************************
+/* // ************************************************************************************
 // Devuelve los datos de un anuncio
 // Devuelve un array con los datos que se mostrarán en el formulario EDITAR
-// ************************************************************************************
+// ************************************************************************************ */
 
-function cargar_anuncio($id_anuncio)
+/* function cargar_anuncio($id_anuncio)
 {
 	//Creo el array vacio:
 	$datos_anuncio = array();
@@ -101,7 +101,7 @@ function cargar_anuncio($id_anuncio)
 		$datos_anuncio["fecha"] = $fila["fecha"];
 	}
 	return $datos_anuncio;
-}
+} */
 
 // ************************************************************************************
 // Edita los datos de un anuncio
@@ -137,7 +137,7 @@ function eliminar($id_anuncio)
 
 // ************************************************************************************
 // Devuelve los datos de un anuncio
-// Devuelve un array con los datos que se mostrarán en el formulario DETALLES_ANUNCIO
+// Devuelve un array con los datos que se mostrarán en los formularios EDITAR y DETALLES_ANUNCIO
 // ************************************************************************************
 
 //Esta función carga los datos de un anuncio, partiendo de su id:
