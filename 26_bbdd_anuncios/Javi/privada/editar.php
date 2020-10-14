@@ -43,7 +43,7 @@ Formulario para EDITAR / ACTUALIZAR anuncios
         <h3>Vas a actualizar los datos del anuncio <span style=color:darkmagenta><?php echo '"' . $_SESSION["titulo"] . '"' ?></span></h3>
         <br>
         <!-- Pasaremos los datos a -controlador_pr- que es el CONTROLADOR  de la zona privada -->
-        <form action="controlador_pr.php" method="post">
+        <form action="controlador_pr.php" method="post" enctype="multipart/form-data">
             <!-- El primer input lo utilizaremos para decirle alcontrolador que hemos seleccionado la opción nº 3 -->
             <input type="hidden" name="op" value="3">
             <!-- Todos los datos los pasaremos con variables de sesión utilizando el método POST -->
@@ -61,7 +61,9 @@ Formulario para EDITAR / ACTUALIZAR anuncios
             <label for="">Fecha:</label>
             <input type="date" name="fecha" value="<?php echo $_SESSION["fecha"] ?>">
             <br><br>
-            <p>Aqui irá la foto</p>
+            <img src="../fotos/<?php echo $_SESSION["foto"] ?>" alt="" width="150">
+            <br>
+            <p>Cambiar la foto: <input type="file" name="foto"></p>
             <br><br>
             <input type="submit" value="Actualizar">
         </form>

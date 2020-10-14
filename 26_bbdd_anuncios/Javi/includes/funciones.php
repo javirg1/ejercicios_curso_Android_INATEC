@@ -68,7 +68,7 @@ function cargarDatosUsuario($id_usuario)
 // Crea un nuevo anuncio
 // ************************************************************************************
 
-function nuevo_anuncio($id_usuario, $titulo, $descripcion, $precio, $fecha,$foto)
+function nuevo_anuncio($id_usuario, $titulo, $descripcion, $precio, $fecha, $foto)
 {
 	//Conectar con la bbdd
 	require("conexion.php");
@@ -80,59 +80,73 @@ function nuevo_anuncio($id_usuario, $titulo, $descripcion, $precio, $fecha,$foto
 	return mysqli_insert_id($conexion);
 }
 
-/* // ************************************************************************************
-// Devuelve los datos de un anuncio
-// Devuelve un array con los datos que se mostrarán en el formulario EDITAR
-// ************************************************************************************ */
-
-/* function cargar_anuncio($id_anuncio)
-{
-	//Creo el array vacio:
-	$datos_anuncio = array();
-	require("conexion.php");
-	$consulta = "Select * from anuncios where id_anuncio = $id_anuncio";
-	$datos = mysqli_query($conexion, $consulta);
-	//Devolver true o false si ha ido bien o mal la validación:
-	if ($fila = mysqli_fetch_assoc($datos)) {
-		$datos_anuncio["id_anuncio"] = $fila["id_anuncio"];
-		$datos_anuncio["titulo"] = $fila["titulo"];
-		$datos_anuncio["descripcion"] = $fila["descripcion"];
-		$datos_anuncio["precio"] = $fila["precio"];
-		$datos_anuncio["fecha"] = $fila["fecha"];
-	}
-	return $datos_anuncio;
-} */
-
 // ************************************************************************************
-// Edita los datos de un anuncio
+// Actualiza los datos de un anuncio
 // ************************************************************************************
 
-function editar($id_anuncio, $titulo, $descripcion, $precio, $fecha)
+function editar($id_anuncio, $titulo, $descripcion, $precio, $fecha, $foto = null)
 {
 	//Conectar con la bbdd
 	require("conexion.php");
+	// Montamos la consulta. Aquí no actualizamos la foto. Lo hacemos unas líneas de código más abajo
 	$consulta = "UPDATE anuncios SET titulo='$titulo', descripcion='$descripcion', precio='$precio', fecha='$fecha' WHERE id_anuncio=$id_anuncio";
-	//Lanzar la consulta a la bbdd mediante la conexion abierta:
+	//Lanzar la consulta a la bbdd mediante la conexion abierta
 	mysqli_query($conexion, $consulta);
-	//Necesito comprobar de alguna forma si el dato se ha insertado:
+	//Necesito comprobar de alguna forma si el dato se ha insertado
 	//Compruebo si ha habido filas (registros) afectados
-	return mysqli_affected_rows($conexion);
+	$filas_afectadas = mysqli_affected_rows($conexion);
+	//Comprobamos si también viene foto para modificar y actualizo el campo en la bbdd
+	if ($foto != null) {
+		$consulta = "UPDATE anuncios SET foto='$foto' WHERE id_anuncio=$id_anuncio";
+		$filas_afectadas = mysqli_query($conexion, $consulta);
+	}
+	return $filas_afectadas;
 }
 
 // ************************************************************************************
-// Elimina los datos de un anuncio
+// Elimina los datos de un anuncio y si tiene foto, también la elimina del servidor
 // ************************************************************************************
 
 function eliminar($id_anuncio)
 {
 	//Conectar con la bbdd
 	require("conexion.php");
-	$consulta = "DELETE FROM  anuncios WHERE id_anuncio=$id_anuncio";
+
+	// *-------------------------------------------------------------------------------------*
+	// Primero comprobamos si el anuncio tiene foto. Si es así, obtenemos su nombre
+	// *-------------------------------------------------------------------------------------*
+
+	$nombre_foto = null;
+	//Primero hago una consulta para obtener el nombre de la foto, si este anuncio tiene asociado foto
+	$consulta = "SELECT foto FROM anuncios WHERE id_anuncio = $id_anuncio AND foto <> 'default.png'";
+	$datos = mysqli_query($conexion, $consulta);
+	if ($fila = mysqli_fetch_assoc($datos)) {
+		$nombre_foto = $fila["foto"];
+	}
+
+	// *-------------------------------------------------------------------------------------*
+	// Eliminamos el anuncio de la bbdd
+	// *-------------------------------------------------------------------------------------*
+
+	$consulta = "DELETE FROM anuncios WHERE id_anuncio=$id_anuncio";
 	//Lanzar la consulta a la bbdd mediante la conexion abierta
 	mysqli_query($conexion, $consulta);
-	//Necesito comprobar de alguna forma si el dato se ha insertado:
-	//Compruebo si ha habido filas (registros) afectados
-	return mysqli_affected_rows($conexion);
+	//Necesito comprobar de alguna forma si el dato se ha eliminado
+	//Una forma sería, pedir a la bbdd el número de filas afectadas
+	$filas_afectadas = mysqli_affected_rows($conexion);
+	
+	// *-------------------------------------------------------------------------------------*
+	// Eliminamos la foto de la carpeta del servidor
+	// *-------------------------------------------------------------------------------------*
+	
+	if ($filas_afectadas > 0) {
+		if ($nombre_foto != null) {
+			//Ya tengo el nombre de la foto, la elimino del servidor
+			$ruta = "../fotos/" . $nombre_foto;
+			unlink($ruta);
+		}
+	}
+	return $filas_afectadas;
 }
 
 // ************************************************************************************
@@ -141,7 +155,8 @@ function eliminar($id_anuncio)
 // ************************************************************************************
 
 //Esta función carga los datos de un anuncio, partiendo de su id:
-function cargarDatosAnuncio($id_anuncio) {
+function cargarDatosAnuncio($id_anuncio)
+{
 	//Creamos el array vacio
 	$datos_anuncio = array();
 	require("conexion.php");
@@ -169,11 +184,12 @@ function cargarDatosAnuncio($id_anuncio) {
 // ************************************************************************************
 
 //Ponemos un parametro opcional (al igualarlo a cero, pasa a ser un parametro opcional)
-function cargarAnuncios($id_usuario=0) {
+function cargarAnuncios($id_usuario = 0)
+{
 	// Creamos el array vacio
 	$datos_anuncios = array();
 	require("conexion.php");
-	if ($id_usuario>0) {
+	if ($id_usuario > 0) {
 		$consulta = "SELECT * FROM anuncios WHERE id_usuario = $id_usuario";
 	} else {
 		$consulta = "SELECT * FROM anuncios";
@@ -190,9 +206,10 @@ function cargarAnuncios($id_usuario=0) {
 // Devuelve la cantidad de anuncios de un usuario o el total de anuncios publicados
 // ************************************************************************************
 
-function contadorAnuncios($id_usuario=0) {
+function contadorAnuncios($id_usuario = 0)
+{
 	require("conexion.php");
-	if ($id_usuario>0) {
+	if ($id_usuario > 0) {
 		$consulta = "SELECT count(*) as total_anuncios FROM anuncios WHERE id_usuario= $id_usuario";
 	} else {
 		$consulta = "SELECT count(*) as total_anuncios FROM anuncios";
@@ -200,7 +217,22 @@ function contadorAnuncios($id_usuario=0) {
 	$datos = mysqli_query($conexion, $consulta);
 	if ($fila = mysqli_fetch_assoc($datos)) {
 		// Dejamos en el array cada una de las filas
-		$contador= $fila["total_anuncios"];
+		$contador = $fila["total_anuncios"];
 	}
 	return $contador;
+}
+
+//Esta función recibe el id de un anuncio, comprueba si tiene asociado una foto y en ese caso la elimina del servidor:
+function eliminarFoto($id_anuncio)
+{
+	//Cargo el nombre actual de la foto asiciada a este anuncio:
+	require("conexion.php");
+	$consulta = "Select foto from anuncios where id_anuncio = $id_anuncio and foto <> 'default.png'";
+	$datos = mysqli_query($conexion, $consulta);
+	if ($fila = mysqli_fetch_assoc($datos)) {
+		$nombre_foto = $fila["foto"];
+		//Ya tengo el nombre de la foto, la elimino del servidor:
+		$ruta = "../fotos/" . $nombre_foto;
+		unlink($ruta);
+	}
 }

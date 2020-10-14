@@ -53,36 +53,34 @@ if ($op == 1) {
     // *-------------------------------------------------------------------------------------*
     // Gestionamos la carga de la foto en el servidor
     // *-------------------------------------------------------------------------------------*
-    $nombre_en_el_servidor="default.png";
-    //Comprobamos si se ha adjuntado una imagen
+
+    // Asignamos nombre de foto por defecto cuando el usuario no carga foto. En el navegador se mostrará la foto que se encuentra en el servidor con el nombre -default.png-
+    $nombre_en_el_servidor = "default.png";
+    // Comprobamos si se ha adjuntado una imagen
     if (!file_exists($_FILES['foto']['tmp_name']) || !is_uploaded_file($_FILES['foto']['tmp_name'])) {
         $ha_subido_archivo = false;
     } else {
         $ha_subido_archivo = true;
     }
-    //Compruebo si ha subido archivo o no:
+    // Comprobamos si ha subido archivo o no:
     if ($ha_subido_archivo == true) {
-        //Proceso los datos del archivo:
-        //Ya estoy seguro de que ha enviado un archivo en el formulario y el servidor lo ha recibido
-        //Recoger el nombre original del archivo
+        // Proceso los datos del archivo
+        // Ya estoy seguro de que ha enviado un archivo en el formulario y el servidor lo ha recibido
+        // Recogemos el nombre original del archivo
         $nombre_archivo_original = $_FILES["foto"]["name"];
-        //Obtenemos el peso del archivo, nos lo da en bytes, lo pasamos a kb
-        //$peso_archivo = $_FILES["foto"]["size"] / 1024;
-        //El tipo de archivo que es:
-        //$tipo_archivo = $_FILES["foto"]["type"];
-        //Obtener el archivo que ha venido del formulario y guardarlo en la carpeta imágenes del servidor:
+        // Obtenemos el archivo que ha venido del formulario y guardarlo en la carpeta imágenes del servidor:
         $archivo = $_FILES["foto"]["tmp_name"];
-        //Especificamos la carpeta de subida (donde lo voy a copiar)
+        // Especificamos la carpeta de subida (donde lo voy a copiar)
         $ruta_de_subida = __DIR__ . "/../fotos/";
-        //Mi objetivo es guardar la imagen en mi carpeta de imagenes del servidor, pero con un nombre único (no con el nombre original)
-        //Hay que añadir la extensión según el archivo original:
+        // Mi objetivo es guardar la imagen en mi carpeta de imagenes del servidor, pero con un nombre único (no con el nombre original)
+        // Hay que añadir la extensión según el archivo original:
         $extension_original = pathinfo($nombre_archivo_original, PATHINFO_EXTENSION);
-        //Voy a crear un nombre de archivo único con el que se guardará en el servidor:
-        //Cojo el tiempo en milisegundos:
+        // Voy a crear un nombre de archivo único con el que se guardará en el servidor:
+        // Cojo el tiempo en milisegundos:
         $nombre_en_el_servidor = round(microtime(true) * 1000);
-        //Y por mayor seguridad, le añado un número aleatorio de 5 digitos:
+        // Y por mayor seguridad, le añado un número aleatorio de 5 digitos:
         $nombre_en_el_servidor = $nombre_en_el_servidor . "_" . rand(10000, 99999) . "." . $extension_original;
-        //Necesito una función que me guarde el archivo en la carpeta del servidor:
+        // Necesito una función que me guarde el archivo en la carpeta del servidor:
         move_uploaded_file($archivo, $ruta_de_subida . $nombre_en_el_servidor);
     }
     // *-------------------------------------------------------------------------------------*
@@ -115,6 +113,7 @@ if ($op == 2) {
     $_SESSION["descripcion"] = $datos_anuncio["descripcion"];
     $_SESSION["precio"] = $datos_anuncio["precio"];
     $_SESSION["fecha"] = $datos_anuncio["fecha"];
+    $_SESSION["foto"] = $datos_anuncio["foto"];
     // redirijimos a -editar.php- de la zona privada. Allí mostraremos los datos del anuncio utilizando las variables de sesión creadas anteriormente
     $pagina = "editar.php";
 }
@@ -131,17 +130,81 @@ if ($op == 3) {
     $descripcion = $_POST["descripcion"];
     $precio = $_POST["precio"];
     $fecha = $_POST["fecha"];
-    // Llamamos a la función que actualizará el anuncio en la bbdd. Esta función devuelve un número que es el total de filas (registros) que se van a actualizar
-    $registro_actualizado = editar($id_anuncio, $titulo, $descripcion, $precio, $fecha);
-    //Comprobamos si hay filas (registros) actualizadas:
-    if ($registro_actualizado > 0) {
+
+    // *-------------------------------------------------------------------------------------*
+    // Gestionamos la carga de la foto NUEVA en el servidor
+    // *-------------------------------------------------------------------------------------*
+
+    // Asignamos nombre de foto por defecto cuando el usuario no carga foto. En el navegador se mostrará la foto que se encuentra en el servidor con el nombre -default.png-
+    $nombre_en_el_servidor = "default.png";
+    // Comprobamos si se ha adjuntado un archivo (una imagen)
+    $ha_subido_archivo = true;
+    if (!file_exists($_FILES['foto']['tmp_name']) || !is_uploaded_file($_FILES['foto']['tmp_name'])) {
+        $ha_subido_archivo = false;
+    }
+
+    if ($ha_subido_archivo == true) {
+        // Procesamos los datos del archivo
+        // Ya estoy seguro de que ha enviado un archivo en el formulario y el servidor lo ha recibido
+        // Recogemos el nombre original del archivo
+        $nombre_archivo_original = $_FILES["foto"]["name"];
+        // Obtenemos el archivo que ha venido del formulario y guardarlo en la carpeta imágenes del servidor
+        $archivo = $_FILES["foto"]["tmp_name"];
+        // Especificamos la carpeta de subida (donde lo voy a copiar)
+        $ruta_de_subida = __DIR__ . "/../fotos/";
+        // Mi objetivo es guardar la imagen en mi carpeta de imagenes del servidor, pero con un nombre único (no con el nombre original)
+        // Hay que añadir la extensión según el archivo original
+        $extension_original = pathinfo($nombre_archivo_original, PATHINFO_EXTENSION);
+        // Voy a crear un nombre de archivo único con el que se guardará en el servidor
+        // Cojo el tiempo en milisegundos
+        $nombre_en_el_servidor = round(microtime(true) * 1000);
+        // Y por mayor seguridad, le añado un número aleatorio de 5 digitos
+        $nombre_en_el_servidor = $nombre_en_el_servidor . "_" . rand(10000, 99999) . "." . $extension_original;
+        // Necesitamos una función que me guarde el archivo en la carpeta del servidor
+        move_uploaded_file($archivo, $ruta_de_subida . $nombre_en_el_servidor);
+
+        // *-------------------------------------------------------------------------------------*
+        // Gestionamos la eliminación de la foto ANTERIOR del servidor
+        // *-------------------------------------------------------------------------------------*
+
+        // Comprobamosr si este anuncio ya tenía una foto antes y no era "default.png". Esto lo getiona la función -eliminarFoto-
+        eliminarFoto($id_anuncio);
+
+        // *-------------------------------------------------------------------------------------*
+        // Gestionamos la actualización y cambios de todos los campos (si el usuario ha cambiado la foto)
+        // *-------------------------------------------------------------------------------------*
+
+        // Llamamos a la función -editar- pasandole también el nombre de la nueva imagen que he subido:
+        //Llamamos a la función que insertar el nuevo anuncio:
+        $filas_afectadas = editar($id_anuncio, $titulo, $descripcion, $precio, $fecha, $nombre_en_el_servidor);
+
+        // *-------------------------------------------------------------------------------------*
+        // Gestionamos la actualización y cambios de todos los campos (si el usuario NO ha cambiado la foto)
+        // *-------------------------------------------------------------------------------------*
+
+    } else {
+        //Llamamos a la función que inserta el nuevo anuncio:
+        $filas_afectadas = editar($id_anuncio, $titulo, $descripcion, $precio, $fecha);
+    }
+
+    // *-------------------------------------------------------------------------------------*
+    // FIN de la gestión de las modificaciones
+    // El siguiente bloque -if- lo utilizamos para redirigir a -index.php- o -editar.php- dependiendo de
+    // si la actualización se ha realizado con exito o no
+    // *-------------------------------------------------------------------------------------*
+
+    //Comprobar si se ha actualizado o no:
+    if ($filas_afectadas > 0) {
         //Si se ha actualizado el anuncio, redirijimos a -index.php- de la zona privada con un mensaje de confirmación
         $pagina = "index.php?aviso=El anuncio se ha actualizado satisfactoriamente";
+        //$msg = "Anuncio actualizado";
     } else {
         //Si no se ha actualizado el anuncio, redirijimos a -editar.php- de la zona privada con un mensje de error
         $pagina = "editar.php?aviso=El anuncio no se ha podido actualizar";
+        //$msg = "No he podido actualizar el anuncio";
     }
 }
+
 
 // ************************************************************************************
 // cruD - ELIMINAR UN ANUNCIO - Opción 4
