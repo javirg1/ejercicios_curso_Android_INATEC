@@ -59,7 +59,7 @@ Formulario para VER el detalle de cada anuncio de la zona pública
         <h3><span style=color:crimson>Descripción: </span><?php echo $anuncio["descripcion"]?></h3>
 		<h3><span style=color:crimson>Precio: </span><?php echo $anuncio["precio"]?></h3>
 		<h3><span style=color:crimson>Fecha de publicación: </span><?php echo $anuncio["fecha"]?></h3>
-        <h3><span style=color:crimson>Publicado por: </span><a href="anuncios_usuario.php?id_usuario=<?php echo $anuncio["id_usuario"]?> & nombre=<?php echo $anuncio["nombre"]?>"><?php echo $anuncio["nombre"]?></a></h3>
+        <h3><span style=color:crimson>Publicado por: </span><a href="anuncios_usuario.php?id_usuario=<?php echo $anuncio['id_usuario']?> & nombre=<?php echo $anuncio['nombre']?>"><?php echo $anuncio['nombre']?></a></h3>
         <hr>
         <p>Para volver al listado de anuncios, haz click <a href="index.php">aquí</a></p>
         
