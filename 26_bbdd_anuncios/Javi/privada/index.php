@@ -80,7 +80,7 @@ Permite añadir, editar y eliminar anuncios -CRUD-
 				//Ahora mostramos los datos en la tabla
 				?>
 				<tr>
-					<td><img src="../fotos/default.png" width="80" /></td>
+					<td><img src="../fotos/<?php echo $anuncio["foto"] ?>" width="80" /></td>
 					<td><?php echo $anuncio["titulo"] ?></td>
 					<td><?php echo $anuncio["fecha"] ?></td>
 					<td><?php echo $anuncio["precio"] ?></td>

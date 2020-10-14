@@ -50,7 +50,7 @@ Formulario para AÑADIR un anuncio nuevo a la zona privada del usuario
         *****************************************************************************************-->
 
         <!-- Pasaremos los datos -controlador_pr- que es el CONTROLADOR  de la zona privada -->
-        <form action="controlador_pr.php" method="post">
+        <form action="controlador_pr.php" method="post" enctype="multipart/form-data">
             <!-- El primer input lo utilizaremos para decirle alcontrolador que hemos seleccionado la opción nº 1 -->
             <input type="hidden" name="op" value="1">
             <label for="">Título:</label>
@@ -65,7 +65,8 @@ Formulario para AÑADIR un anuncio nuevo a la zona privada del usuario
             <label for="">Fecha:</label>
             <input type="date" name="fecha" required>
             <br><br>
-            <p>Aqui irá la foto</p>
+            <label for="">Añade una foto, si lo deseas:</label>
+            <input type="file" name="foto">
             <br><br>
             <input type="submit" value="Guardar">
             <br><br>

@@ -64,7 +64,7 @@ Formulario para LISTAR los anuncios de la zona pública -todos los usuarios-
 					//Ahora mostramos los datos en la tabla
 				?>
 			<tr>
-				<td><img src="../fotos/default.png" width="80" /></td>
+				<td><img src="../fotos/<?php echo $anuncio["foto"] ?>" width="80" /></td>
 				<td><?php echo $anuncio["titulo"] ?></a></td>
 				<td><?php echo $anuncio["fecha"] ?></td>
 				<td><?php echo $anuncio["precio"] ?></td>

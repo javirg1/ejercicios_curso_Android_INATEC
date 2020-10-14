@@ -68,11 +68,11 @@ function cargarDatosUsuario($id_usuario)
 // Crea un nuevo anuncio
 // ************************************************************************************
 
-function nuevo_anuncio($id_usuario, $titulo, $descripcion, $precio, $fecha)
+function nuevo_anuncio($id_usuario, $titulo, $descripcion, $precio, $fecha,$foto)
 {
 	//Conectar con la bbdd
 	require("conexion.php");
-	$consulta = "INSERT INTO anuncios(id_usuario, titulo, descripcion,precio,fecha) VALUES ('$id_usuario','$titulo','$descripcion','$precio','$fecha')";
+	$consulta = "INSERT INTO anuncios(id_usuario, titulo, descripcion,precio,fecha,foto) VALUES ('$id_usuario','$titulo','$descripcion','$precio','$fecha','$foto')";
 	//Lanzar la consulta a la bbdd mediante la conexion abierta:
 	mysqli_query($conexion, $consulta);
 	//Necesito comprobar de alguna forma si el dato se ha insertado:
@@ -146,7 +146,7 @@ function cargarDatosAnuncio($id_anuncio) {
 	$datos_anuncio = array();
 	require("conexion.php");
 	// SQL que combina datos de las dos tabas para mostrar el nombre del usuario que ha publicado el anuncio 
-	$consulta = "Select id_anuncio,titulo,fecha,precio,descripcion,nombre,usuarios.id_usuario from anuncios,usuarios where id_anuncio = $id_anuncio and usuarios.id_usuario = anuncios.id_usuario";
+	$consulta = "Select id_anuncio,titulo,fecha,precio,descripcion,nombre,foto,usuarios.id_usuario from anuncios,usuarios where id_anuncio = $id_anuncio and usuarios.id_usuario = anuncios.id_usuario";
 	//Lanzamos la consulta a la bbdd mediante la conexion abierta
 	$datos = mysqli_query($conexion, $consulta);
 	//recorro los datos que me devuelve la bbdd y los meto en un array
@@ -158,6 +158,7 @@ function cargarDatosAnuncio($id_anuncio) {
 		$datos_anuncio["descripcion"] = $fila["descripcion"];
 		$datos_anuncio["id_usuario"] = $fila["id_usuario"];
 		$datos_anuncio["nombre"] = $fila["nombre"];
+		$datos_anuncio["foto"] = $fila["foto"];
 	}
 	return $datos_anuncio;
 }

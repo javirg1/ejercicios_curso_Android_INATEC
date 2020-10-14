@@ -54,7 +54,7 @@ Formulario para VER el detalle de cada anuncio de la zona pública
         <h3>Datos del anuncio</h3>
         <hr>
         <!-- Mostramos los datos del anuncio -->
-        <img src="../fotos/default.png" width="80" />
+        <img src="../fotos/<?php echo $anuncio["foto"] ?>" width="80" />
         <h3><span style=color:crimson>Artículo: </span><?php echo $anuncio["titulo"]?></h3>
         <h3><span style=color:crimson>Descripción: </span><?php echo $anuncio["descripcion"]?></h3>
 		<h3><span style=color:crimson>Precio: </span><?php echo $anuncio["precio"]?></h3>
