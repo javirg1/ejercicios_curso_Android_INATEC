@@ -52,7 +52,7 @@ session_start();
 				//Ahora ya puedo pintar la fila en HTML:
 				?>
 				<tr>
-					<td><img src="../fotos/default.png" width="80" /></td>
+					<td><img src="../fotos/<?php echo $anuncio['foto'] ?>" width="80" /></td>
 					<td><a href="ver_anuncio.php?id_anuncio=<?php echo $id_anuncio ?>"><?php echo $anuncio["titulo"] ?></a></td>
 					<td><?php echo $anuncio["fecha"] ?></td>
 					<td><?php echo $anuncio["precio"] ?></td>

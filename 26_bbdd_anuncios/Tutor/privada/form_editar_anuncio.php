@@ -38,7 +38,7 @@ if (!isset($_GET["id_anuncio"])) {
 
 		<p>-Volver al <a href="index.php">listado de anuncios</a> o si lo deseas <a href="salir.php">sal de tu zona privada</a></p>
 
-		<form action="controlador.php?op=3" method="POST">
+		<form action="controlador.php?op=3" method="POST" enctype="multipart/form-data">
 			<input type="hidden" value="<?php echo $anuncio['id_anuncio'] ?>" name="inp_id_anuncio"/>
 			<table width="400">
 				<tr>
@@ -56,6 +56,14 @@ if (!isset($_GET["id_anuncio"])) {
 				<tr>
 					<td>Descripción:</td>
 					<td><textarea name="inp_descripcion" cols="30" rows="3"><?php echo $anuncio['descripcion'] ?></textarea></td>
+				</tr>
+				<tr>
+					<td>Imagen:</td>
+					<td><img src="../fotos/<?php echo $anuncio['foto'] ?>" width="200" /></td>
+				</tr>
+				<tr>
+					<td>Imagen:</td>
+					<td><input type="file" name="inp_imagen"/></td>
 				</tr>
 				<tr>
 					<td></td>

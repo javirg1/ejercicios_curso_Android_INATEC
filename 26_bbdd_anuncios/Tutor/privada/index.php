@@ -56,7 +56,7 @@ if (isset($_SESSION["id_usuario"])) {
 				//Ahora ya puedo pintar la fila en HTML:
 				?>
 				<tr>
-					<td><img src="../fotos/default.png" width="80" /></td>
+					<td><img src="../fotos/<?php echo $anuncio['foto'] ?>" width="80" /></td>
 					<td><?php echo $anuncio["titulo"] ?></td>
 					<td><?php echo $anuncio["fecha"] ?></td>
 					<td><?php echo $anuncio["precio"] ?></td>

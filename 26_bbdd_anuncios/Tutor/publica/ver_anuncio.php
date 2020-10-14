@@ -33,7 +33,7 @@ session_start();
 		<?php } ?>
 		<p>Detalle del anuncio</p>
 		<h3><?php echo $anuncio["titulo"]?></h3>
-		<p><img src="../fotos/default.png" width="300"></p>
+		<p><img src="../fotos/<?php echo $anuncio['foto']?>" width="300"></p>
 		<p><?php echo $anuncio["descripcion"]?></p>
 		<p>Fecha: <?php echo $anuncio["fecha"]?> - Precio: <?php echo $anuncio["precio"]?></p>
 		<p>Publicado por: <?php echo $anuncio["nombre_usuario"]?> - <a href="index.php?id_usuario=<?php echo $anuncio['id_usuario']?>">(Ver sus anuncios)</a></p>

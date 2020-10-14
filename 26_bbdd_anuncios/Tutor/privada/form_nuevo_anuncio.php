@@ -26,7 +26,7 @@ if (isset($_SESSION["id_usuario"])) {
 
 		<p>-Volver al <a href="index.php">listado de anuncios</a> o si lo deseas <a href="salir.php">sal de tu zona privada</a></p>
 
-		<form action="controlador.php?op=2" method="POST">
+		<form action="controlador.php?op=2" method="POST" enctype="multipart/form-data">
 			<table width="400">
 				<tr>
 					<td>Título:</td>
@@ -43,6 +43,10 @@ if (isset($_SESSION["id_usuario"])) {
 				<tr>
 					<td>Descripción:</td>
 					<td><textarea name="inp_descripcion" cols="30" rows="3"></textarea></td>
+				</tr>
+				<tr>
+					<td>Imagen:</td>
+					<td><input type="file" name="inp_imagen"/></td>
 				</tr>
 				<tr>
 					<td></td>
