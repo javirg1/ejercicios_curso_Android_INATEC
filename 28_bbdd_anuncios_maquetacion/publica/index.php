@@ -36,10 +36,6 @@ session_start();
     <link href="album.css" rel="stylesheet">
   </head>
   <?php
-
-
-
-
     //Incluyo el archivo con las funciones:
     require("../includes/funciones.php");
     //Vamos a distinguir si tengo que mostrar todos los anuncios, o los de un usuario concreto:
@@ -51,12 +47,12 @@ session_start();
       $usuario = cargarDatosUsuario($id_usuario);
       $nombre_usuario = $usuario["nombre"];
       //echo "<p>Listado de los anuncios de $nombre_usuario. <a href='index.php'>(Volver al listado principal)</a></p>";
-    } else {?>
+    } else {
       //Cargar todos los anuncios:
       $anuncios = cargarAnuncios();
       //echo "<p>Listado de todos los anuncios</p>";
-      <?php } ?>
-
+    }
+  ?>
   <body>
     <header>
   <div class="collapse bg-dark" id="navbarHeader">
@@ -96,14 +92,15 @@ session_start();
     <div class="container">
       <h1>Gualapop</h1>
       <p class="lead text-muted">Si no lo usas véndelo, dale una segunda vida y saca dinero.</p>
+
       <?php
       //Si el usuario está identificado, le ofrecemos el enlace para ir a la zona privada
       if (isset($_SESSION["id_usuario"])) { ?>
       <p>
-        <a href="#" class="btn btn-primary my-2">Ir a mi zona privada</a>
+        <a href="../privada/index.php" class="btn btn-primary my-2">Ir a mi zona privada</a>
       </p>
       <?php } else { ?>
-        <a href="#" class="btn btn-primary my-2">Identifícate</a>
+        <a href="login.php" class="btn btn-primary my-2">Identifícate</a>
       <?php } 
       if(isset($_GET["id_usuario"])) { ?>
           <p class="lead text-muted">Listado de los anuncios de <?php echo $nombre_usuario ?></p>
@@ -121,17 +118,12 @@ session_start();
       <div class="row">
 
         <?php
-        if (isset($_GET["id_anuncio"])) {
-          $id_anuncio = $_GET["id_anuncio"];
-          //Cargar los datos del anuncio:
-          //Incluyo el archivo con las funciones:
-          $anuncio = cargarDatosAnuncio($id_anuncio);
-          //var_dump($anuncio);exit;
-        } else {
-          header("Location:index.php");
-          exit;
-        }
-        ?>
+        for($pos=0;$pos<count($anuncios);$pos++) {
+          //Con este bucle recorremos posicion a posicion el array y extraer el anuncio que hay en cada posición:
+          $anuncio = $anuncios[$pos];
+          $id_anuncio = $anuncio["id_anuncio"];
+          //Ahora ya puedo pintar la fila en HTML:
+          ?>
 
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
@@ -142,7 +134,7 @@ session_start();
                 <p class="card-text"><?php echo $anuncio["fecha"] ?></p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <a href="#" class="btn btn-sm btn-outline-secondary">View</a>
+                    <a href="ver_anuncio.php?id_anuncio=<?php echo $anuncio["id_anuncio"] ?>" class="btn btn-sm btn-outline-secondary">Ver</a>
                   </div>
                   <small class="text-muted"><?php echo $anuncio["precio"] ?> €</small>
                 </div>
@@ -150,6 +142,7 @@ session_start();
             </div>
           </div>
 
+        <?php } ?>
 
       </div>
     </div>

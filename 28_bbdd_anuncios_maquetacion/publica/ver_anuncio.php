@@ -1,4 +1,16 @@
 <?php
+//Si no viene en la url el id de un anuncio, no tiene sentido mostrar esta pagina:
+if (isset($_GET["id_anuncio"])) {
+  $id_anuncio = $_GET["id_anuncio"];
+  //Cargar los datos del anuncio:
+  //Incluyo el archivo con las funciones:
+  require("../includes/funciones.php");
+  $anuncio = cargarDatosAnuncio($id_anuncio);
+  //var_dump($anuncio);exit;
+} else {
+  header("Location:index.php");
+  exit;
+}
 session_start();
 ?>
 <!doctype html>
@@ -36,8 +48,6 @@ session_start();
     <link href="album.css" rel="stylesheet">
   </head>
   <?php
-    //Incluyo el archivo con las funciones:
-    require("../includes/funciones.php");
     //Vamos a distinguir si tengo que mostrar todos los anuncios, o los de un usuario concreto:
     if(isset($_GET["id_usuario"])) {
       //Cargar los anuncios de este usuario:
@@ -105,45 +115,35 @@ session_start();
           <p class="lead text-muted">Listado de los anuncios de <?php echo $nombre_usuario ?></p>
           <a href='index.php'>(Volver al listado principal)</a>
       <?php } else { ?>
-          <p class="lead text-muted">Listado de todos los anuncios.</p>
+          <p class="lead text-muted"><?php echo $anuncio["titulo"] ?></p>
       <?php } ?>
-            
+      <a href="index.php" class="btn btn-secondary my-2">Volver al listado</a>
     </div>
   </section>
 
   <div class="album py-5 bg-light">
     <div class="container">
 
-      <div class="row">
+          <!-- Aqui viene el bloque con la información del anuncio -->
 
-        <?php
-        for($pos=0;$pos<count($anuncios);$pos++) {
-          //Con este bucle recorremos posicion a posicion el array y extraer el anuncio que hay en cada posición:
-          $anuncio = $anuncios[$pos];
-          $id_anuncio = $anuncio["id_anuncio"];
-          //Ahora ya puedo pintar la fila en HTML:
-          ?>
-
-          <div class="col-md-4">
+          <div class="col">
             <div class="card mb-4 shadow-sm">
               <img src="../fotos/<?php echo $anuncio['foto'] ?>" width="100%" />
               
               <div class="card-body">
                 <p class="card-text"><strong><?php echo $anuncio["titulo"] ?></strong></p>
                 <p class="card-text"><?php echo $anuncio["fecha"] ?></p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <a href="ver_anuncio.php?id_anuncio=<?php echo $id_anuncio ?>" class="btn btn-sm btn-outline-secondary">View</a>
+                <p class="card-text"><?php echo $anuncio["descripcion"] ?></p>
+                <p class="card-text"><strong>Precio:</strong><?php echo $anuncio["precio"] ?></p>
+
+                <div class="btn-group">
+                    <a href="index.php?id_usuario=<?php echo $anuncio['id_usuario']?>" class="btn btn-sm btn-outline-secondary">Ver mas anuncios del usuario</a>
                   </div>
-                  <small class="text-muted"><?php echo $anuncio["precio"] ?> €</small>
-                </div>
               </div>
             </div>
           </div>
 
-        <?php } ?>
 
-      </div>
     </div>
   </div>
 
