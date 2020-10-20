@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejemplo básico JScript</title>
+  </head>
+  <body>
+    <center>
+      <h1>Este es un ejemplo de documento web con JScript - DOM</h1>
+      <p>
+        <input type="button" value="Edad aleatoria" onclick="NumerosAleatorios(10,30)" />
+      </p>
+      <form action="" name="formula" >
+        <input type="text" id="msg">
+      </form>
+    </center>
+  </body>
+  <script>
+    function NumerosAleatorios(min, max) {
+      var aleat = Math.round(Math.random() * (max - min) + min);
+      if (aleat < 18) {
+        document.formula.msg.value = aleat + " años. Eres menor de edad";
+      } else {
+        document.formula.msg.value = aleat + " años. Eres mayor de edad";
+      }
+    }
+  </script>
+</html>
+

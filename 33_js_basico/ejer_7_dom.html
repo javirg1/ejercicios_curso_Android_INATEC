@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejemplo básico JScript</title>
+  </head>
+  <body>
+    <center>
+      <h1>Este es un ejemplo de documento web con JScript - DOM</h1>
+      <p>
+        <input type="button" value="Cambiar imagen" onclick="cambiarImagen()" />
+      </p>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ9Im8m_WJPYyybuVXX6WymkOZrJoAoJ3A-oQ&usqp=CAU" alt="" id="img1">
+    </center>
+  </body>
+  <script>
+    function cambiarImagen() {
+      document.getElementById("img1").src="https://marcianosmx.com/wp-content/uploads/2013/08/minimoo64_fractals_16.jpg";
+
+    }
+  </script>
+</html>
+

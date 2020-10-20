@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejemplo básico JScript</title>
+  </head>
+  <body>
+    <center>
+      <h1>Este es un ejemplo de documento web con JScript</h1>
+      <p>
+        <input
+          type="button"
+          value="Número aleatorio"
+          onclick="NumerosAleatorios(1,10)"
+        />
+      </p>
+    </center>
+  </body>
+  <script>
+    /* var min = 1;
+    var max = 10; */
+    function NumerosAleatorios(min, max) {
+      var aleat = Math.round(Math.random() * (max - min) + min);
+      alert("Número aleatorio entre 1 y 10: " + aleat);
+    }
+  </script>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejemplo básico JScript</title>
+  </head>
+  <body>
+    <center>
+      <h1>Este es un ejemplo de documento web con JScript</h1>
+      <!-- evento onclick -->
+      <p><input type="button" value="Saludar" onclick="saludar()"></p>
+    </center>
+  </body>
+  <script>
+      /* Definimos funciones */
+    function saludar() {
+      alert("Buenos días " + nombre + " , tienes " + edad + " años.");
+    }
+    /* Asignamos variables */
+    var nombre = "Javi";
+    var edad = "25";
+    /* Podemos llamar a la consola para lanzar mensajes o contenidos de variables (depuración) */
+    console.log("Contenido de la variable nombre: " + nombre);
+    /* Podemos llamar a la función en cualquier momento (siguiente línea comentada) */
+    /* saludar(); */
+  </script>
+</html>

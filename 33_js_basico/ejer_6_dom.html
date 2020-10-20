@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejemplo básico JScript</title>
+  </head>
+  <body>
+    <center>
+      <h1>Este es un ejemplo de documento web con JScript - DOM</h1>
+      <p>
+        <input type="button" value="Verificar input" onclick="verificaInput()" />
+      </p>
+      <form action="" name="formulario" >
+        <input type="text" id="caja_texto">
+      </form>
+    </center>
+  </body>
+  <script>
+    function verificaInput() {
+      if (document.formulario.caja_texto.value == "") {
+        alert("El input está vacío");
+      } else {
+        alert("El input contiene: "+document.formulario.caja_texto.value);
+      }
+    }
+  </script>
+</html>
+
